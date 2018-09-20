@@ -121,9 +121,17 @@ public class Hotel {
   }
 
 
-	public void checkout(int roomId) {
-		// TODO Auto-generated method stub
-	}
+	public void checkout(int roomId)
+  {
+    Booking booking = (Booking)activeBookingsByRoomId.get(Integer.valueOf(roomId));
+    if (booking == null) { //validate for a valid room id
+      String mesg = String.format("Hotel: checkout: no booking present for room id : %d", new Object[] { Integer.valueOf(roomId) });
+      throw new RuntimeException(mesg); //handle exception
+    }
+    booking.checkOut(); //call checkOut() method
+    activeBookingsByRoomId.remove(Integer.valueOf(roomId)); //make those checkout rooms available by removing them  activeBookingsByRoomId hashmap
+  }
+
 
 
 }
