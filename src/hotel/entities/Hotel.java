@@ -96,9 +96,18 @@ public class Hotel {
 	}
 
 
-	public void checkin(long confirmationNumber) {
-		// TODO Auto-generated method stub
-	}
+	public void checkin(long confirmationNumber)
+  {
+    Booking booking = (Booking)bookingsByConfirmationNumber.get(Long.valueOf(confirmationNumber));
+    if (booking == null) { //validation of booking confirmationNumber
+      String message = String.format("Hotel: checkin: No booking details have been found for confirmation number %d", new Object[] { Long.valueOf(confirmationNumber) });
+      throw new RuntimeException(message); //exception handling using throw clause
+    }
+    int roomId = booking.getRoomId(); //get correspondence room id
+
+    booking.checkIn(); //call checking method of booking class
+    activeBookingsByRoomId.put(Integer.valueOf(roomId), booking); //add values to hashmap
+  }
 
 
 	public void addServiceCharge(int roomId, ServiceType serviceType, double cost) {
