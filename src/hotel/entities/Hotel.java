@@ -84,16 +84,15 @@ public class Hotel {
 		return bookingsByConfirmationNumber.get(confirmationNumber);
 	}
 
-
+//implementation of the public long book
 	public long book(Room room, Guest guest,
 			Date arrivalDate, int stayLength, int occupantNumber,
 			CreditCard creditCard) {
-			Booking booking = room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
-			long confirmationNumber = booking.getConfirmationNumber();
-			bookingsByConfirmationNumber.put(Long.valueOf(confirmationNumber), booking);
+			Booking booking = room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard); //access room entity class's implemented code by other grouo member
+			long confirmationNumber = booking.getConfirmationNumber(); //get returned value of the long variable
+			bookingsByConfirmationNumber.put(Long.valueOf(confirmationNumber), booking); //add values to hash map
 
-
-			return confirmationNumber;
+			return confirmationNumber; //finaly return the confirmation number
 	}
 
 
