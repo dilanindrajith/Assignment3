@@ -85,11 +85,14 @@ public class Hotel {
 	}
 
 	
-	public long book(Room room, Guest guest, 
-			Date arrivalDate, int stayLength, int occupantNumber,
-			CreditCard creditCard) {
-		// TODO Auto-generated method stub
-		return 0L;		
+	public long book(Room room, Guest guest, Date arrivalDate, int stayLength, int occupantNumber, CreditCard creditCard) {
+		// creating a Booking object by booking the room
+		Booking bookingO = room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
+		// get confirmation number for booking
+    		long bookConfirmationNumber = bookingObj.getConfirmationNumber();
+		// store booking number
+    		bookingsByConfirmationNumber.put(Long.valueOf(bookConfirmationNumber), bookingObj);
+    		return bookConfirmationNumber;		
 	}
 
 	
