@@ -127,14 +127,14 @@ public class Hotel {
 	// relese the room after booking
 	public void checkout(int roomId) {
 		// get booking using the given roomId
-		Booking booking = (Booking)activeBookingsByRoomId.get(Integer.valueOf(roomId));
+		Booking bookingObj = (Booking)activeBookingsByRoomId.get(Integer.valueOf(roomId));
 		// check booking is available for the given room Id. If not show massage
-    		if (booking == null) {
-      			String mesg = String.format("class Hotel, method addServiceCharge; Can't find booking for given roomId  : %d", new Object[] { Integer.valueOf(roomId) });
-      			throw new RuntimeException(mesg);
+    		if (bookingObj == null) {
+      			String notFoundMassage = String.format("class Hotel, method addServiceCharge; Can't find booking for given roomId  : %d", new Object[] { Integer.valueOf(roomId) });
+      			throw new RuntimeException(notFoundMassage);
     		}
 		// check out the booking
-    		booking.checkOut();
+    		bookingObj.checkOut();
 		// romve booking form activeBookingsByRoomId
     		activeBookingsByRoomId.remove(Integer.valueOf(roomId));
 	}
