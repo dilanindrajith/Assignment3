@@ -111,9 +111,17 @@ public class Hotel {
     		activeBookingsByRoomId.put(Integer.valueOf(roomId), bookingObj);
 	}
 
-
+	// add service charge for the booking
 	public void addServiceCharge(int roomId, ServiceType serviceType, double cost) {
-		// TODO Auto-generated method stub
+		// get booking using the room Id
+		Booking bookingObj = (Booking)activeBookingsByRoomId.get(Integer.valueOf(roomId));
+		// check booking is available for the given room Id. If not show massage
+    		if (bookingObj == null) {
+      			String notFoundMassage = String.format("class Hotel, method addServiceCharge; Can't find booking for given roomId  : %d", new Object[] { Integer.valueOf(roomId) });
+      			throw new RuntimeException(notFoundMassage);
+    		}
+		// add service charge
+    		bookingObj.addServiceCharge(serviceType, cost);
 	}
 
 	
