@@ -84,10 +84,10 @@ public class Hotel {
 		return bookingsByConfirmationNumber.get(confirmationNumber);
 	}
 
-	
+	// booking room and get a confirmation number
 	public long book(Room room, Guest guest, Date arrivalDate, int stayLength, int occupantNumber, CreditCard creditCard) {
 		// creating a Booking object by booking the room
-		Booking bookingO = room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
+		Booking bookingObj = room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
 		// get confirmation number for booking
     		long bookConfirmationNumber = bookingObj.getConfirmationNumber();
 		// store booking number
@@ -95,9 +95,20 @@ public class Hotel {
     		return bookConfirmationNumber;		
 	}
 
-	
+	// set state to CHECKED_IN and store booking in activeBookingsByRoomId
 	public void checkin(long confirmationNumber) {
-		// TODO Auto-generated method stub
+		// get booking object by using confirmation number
+		Booking bookingObj = (Booking)bookingsByConfirmationNumber.get(Long.valueOf(confirmationNumber));
+		// check a booking is exist for the given confirmation number. if not end function with throw a error massage
+    		if (booking == null) {
+      			String notFoundMassage = String.format("class Hotel, method checkin; can't find booking for given confirmation number %d", new Object[] { Long.valueOf(confirmationNumber) });
+      			throw new RuntimeException(notFoundMassage);
+    		}
+    		int roomId = bookingObj.getRoomId();
+    		// set sate of booking to CHECKED_IN
+    		bookingObj.checkIn();
+		// Store the booking in activeBookingsByRoomId (contains only bookings of acive rooms)
+    		activeBookingsByRoomId.put(Integer.valueOf(roomId), bookingObj);
 	}
 
 
