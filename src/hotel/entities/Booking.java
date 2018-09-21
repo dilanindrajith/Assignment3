@@ -133,17 +133,41 @@ public class Booking {
 
 
 	public void checkIn() {
-		// TODO Auto-generated method stub
+		 //checking state befor the checking
+               if (state != State.PENDING) {
+              //if state not equal to pending error message will display with current stste
+             String message = String.format("Booking: checkIn : bad state : %s", new Object[] { state });
+                throw new RuntimeException(message);//run time exception will be thrown.
+               }
+            //execute checkin method of room class
+             room.checkin();
+            //make state as checked in
+             state = State.CHECKED_IN;
 	}
 
 
 	public void addServiceCharge(ServiceType serviceType, double cost) {
-		// TODO Auto-generated method stub
+		//checking the state first
+		if (state != State.CHECKED_IN) {
+            String message = String.format("Booking: addServiceCharge : bad state : %s", new Object[] { state });
+            throw new RuntimeException(message);
+                 }
+                //creating an instance of service charge with passed parameters
+               ServiceCharge servCharge = new ServiceCharge(serviceType, cost);
+               charges.add(servCharge); // add charge to the charges list
 	}
 
 
 	public void checkOut() {
-		// TODO Auto-generated method stub
+		//checking the state first
+                if (state != State.CHECKED_IN) {
+              String message = String.format("Booking: checkOut : bad state : %s", new Object[] { state });
+              throw new RuntimeException(message);
+               }
+             //passing object of the class to checkout method of room class
+             room.checkout(this);
+             // change state as checked out.
+             state = State.CHECKED_OUT;
 	}
 
 }
