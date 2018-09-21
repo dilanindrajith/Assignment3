@@ -124,9 +124,19 @@ public class Hotel {
     		bookingObj.addServiceCharge(serviceType, cost);
 	}
 
-	
+	// relese the room after booking
 	public void checkout(int roomId) {
-		// TODO Auto-generated method stub
+		// get booking using the given roomId
+		Booking booking = (Booking)activeBookingsByRoomId.get(Integer.valueOf(roomId));
+		// check booking is available for the given room Id. If not show massage
+    		if (booking == null) {
+      			String mesg = String.format("class Hotel, method addServiceCharge; Can't find booking for given roomId  : %d", new Object[] { Integer.valueOf(roomId) });
+      			throw new RuntimeException(mesg);
+    		}
+		// check out the booking
+    		booking.checkOut();
+		// romve booking form activeBookingsByRoomId
+    		activeBookingsByRoomId.remove(Integer.valueOf(roomId));
 	}
 
 
