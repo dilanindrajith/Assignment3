@@ -25,7 +25,10 @@ public class Booking {
 	
 	private State state;
 
-
+       public Booking(){
+           setState(State.PENDING);
+           this.charges = new ArrayList<>();
+       }
 	
 	public Booking(Guest guest, Room room, 
 			Date arrivalDate, int stayLength, 
@@ -75,7 +78,14 @@ public class Booking {
 
 		return doesConflict;
 	}
+	
+        public State getState() {
+        return state;
+         }
 
+      public void setState(State state) {
+        this.state = state;
+       }
 
 	public long getConfirmationNumber() {
 		return confirmationNumber;
@@ -147,27 +157,29 @@ public class Booking {
 
 
 	public void addServiceCharge(ServiceType serviceType, double cost) {
-		//checking the state first
-		if (state != State.CHECKED_IN) {
-            String message = String.format("Booking: addServiceCharge : bad state : %s", new Object[] { state });
-            throw new RuntimeException(message);
-                 }
+		 checkIn();
+            //checking the state first
+		if (getState() != State.CHECKED_IN) {
+      String message = String.format("Booking: addServiceCharge : bad state : %s", new Object[] { getState()});
+      throw new RuntimeException(message);
+           }
                 //creating an instance of service charge with passed parameters
-               ServiceCharge servCharge = new ServiceCharge(serviceType, cost);
-               charges.add(servCharge); // add charge to the charges list
+    ServiceCharge servCharge = new ServiceCharge(serviceType, cost);
+    charges.add(servCharge); // add charge to the charges list
 	}
 
 
 	public void checkOut() {
+		checkIn();
 		//checking the state first
-                if (state != State.CHECKED_IN) {
-              String message = String.format("Booking: checkOut : bad state : %s", new Object[] { state });
-              throw new RuntimeException(message);
-               }
-             //passing object of the class to checkout method of room class
-             room.checkout(this);
-             // change state as checked out.
-             state = State.CHECKED_OUT;
+         if (getState() != State.CHECKED_IN) {
+      String message = String.format("Booking: checkOut : bad state : %s", new Object[] { getState()});
+      throw new RuntimeException(message);
+          }
+         //passing object of the class to checkout method of room class
+         room.checkout(this);
+         // change state as checked out.
+          setState(State.CHECKED_OUT);
 	}
 
 }
