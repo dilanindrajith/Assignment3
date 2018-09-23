@@ -137,7 +137,46 @@ public class BookingCTL {
 
 
 	public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
-		// TODO Auto-generated method stub
+		 //checking the state whether it is credit
+           if (state != State.CREDIT) {
+      String message = String.format("BookingCTL: BookingTimesEntered : bad state : %s", new Object[] { state });
+      throw new RuntimeException(message);
+    }
+           //creating an instance of credit card with passing values to constructor
+    CreditCard creditCard = new CreditCard(type, number, ccv);
+    // getting return value as true or false
+    boolean approved = CreditAuthorizer.getInstance().authorize(creditCard, cost);
+    
+    if (!approved) {
+      String creditNotAuthorizedMessage = String.format(
+        "\n%s credit card number %d was not authorized for $%.2f\n", new Object[] {
+        creditCard.getType().getVendor(), Integer.valueOf(creditCard.getNumber()), Double.valueOf(cost) });
+      
+      bookingUI.displayMessage(creditNotAuthorizedMessage); //display error message if error occurs
+    }
+    else {
+        //assigning return value to long variable from book method of hotel class
+      long confirmationNumber = hotel.book(room, guest, 
+        arrivalDate, stayLength, 
+        occupantNumber, creditCard);
+      
+      //assign values to local variables
+      String roomDecription = room.getDescription();
+      int roomNumber = room.getId();
+      String guestName = guest.getName();
+      String creditCardVendor = creditCard.getVendor();
+      int cardNumber = creditCard.getNumber();
+      
+      //passing variable values to booking user interface
+      bookingUI.displayConfirmedBooking(roomDecription, roomNumber, 
+        arrivalDate, stayLength, guestName, 
+        creditCardVendor, cardNumber, cost, 
+        confirmationNumber);
+      
+      //set state to completed
+      state = State.COMPLETED;
+      bookingUI.setState(BookingUI.State.COMPLETED);
+         }
 	}
 
 
